@@ -34,11 +34,14 @@ echo "Uploading app.yaml..."
 databricks workspace import "$WORKSPACE_PATH/app.yaml" --file app.yaml --format AUTO --overwrite
 
 # Upload backend files
-echo "Uploading backend/app_main.py..."
-databricks workspace import "$WORKSPACE_PATH/backend/app_main.py" --file backend/app_main.py --language PYTHON --overwrite
+echo "Uploading backend/app_simple.py..."
+databricks workspace import "$WORKSPACE_PATH/backend/app_simple.py" --file backend/app_simple.py --language PYTHON --overwrite
 
 echo "Uploading backend/requirements.txt..."
 databricks workspace import "$WORKSPACE_PATH/backend/requirements.txt" --file backend/requirements.txt --format AUTO --overwrite
+
+echo "Uploading backend/__init__.py..."
+databricks workspace import "$WORKSPACE_PATH/backend/__init__.py" --file backend/__init__.py --language PYTHON --overwrite
 
 # Upload frontend files
 echo "Uploading frontend/dist/index.html..."
