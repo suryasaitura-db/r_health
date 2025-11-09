@@ -1,0 +1,16 @@
+# R_Health Dash Application - Databricks Apps Configuration
+# Healthcare Analytics Platform with 5 scenarios
+
+command:
+  - "gunicorn"
+  - "app:server"
+  - "--bind"
+  - "0.0.0.0:8000"
+  - "--workers"
+  - "2"
+  - "--timeout"
+  - "120"
+
+env:
+  - name: ENVIRONMENT
+    value: "production"

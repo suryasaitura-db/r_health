@@ -536,6 +536,41 @@ curl "http://localhost:8000/api/documentation-management?urgency=High"
 
 ## Deployment
 
+### Live Deployments
+
+#### Option-C Dash Application (NEW - Purple/Teal Theme)
+**Status:** RUNNING
+**URL:** https://r-health-dash-option-c-1602460480284688.aws.databricksapps.com
+**Features:** Modern purple/teal gradient theme with smooth CSS animations
+
+#### Original Dash Application (Blue Theme)
+**Status:** RUNNING
+**URL:** https://r-health-dash-1602460480284688.aws.databricksapps.com
+**Features:** Classic blue theme healthcare analytics
+
+#### AI/BI Lakeview Dashboards (5 Dashboards)
+All dashboards available at: https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboards
+
+1. **Capacity Management**: https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfac412338ed9128ce622faf7
+2. **Denials Management**: https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfb0a169abb63051cf302d657
+3. **Clinical Trial Matching**: https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfb561e3db274a29d97e67ccb
+4. **Timely Filing & Appeals**: https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfb98119cb47f6cf14fe102d4
+5. **Documentation Management**: https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfbe61fec87bd0d61c98f4194
+
+### Deployment Comparison: Original vs Option-C
+
+| Feature | Original Dash App | Option-C Dash App (NEW) |
+|---------|------------------|-------------------------|
+| **Theme** | Blue (#1976D2) | Purple/Teal Gradient (#6B46C1 + #14B8A6) |
+| **Animations** | Basic | Advanced CSS (fade-in, slide-in, hover) |
+| **Navigation** | Static links | Animated underlines on hover |
+| **Cards** | Standard shadows | Hover elevation & transformations |
+| **Color Scheme** | Blue monochrome | Purple-to-Teal gradient |
+| **Effects** | Standard | Pulse, scale, smooth transitions |
+| **Deployment Name** | r-health-dash | r-health-dash-option-c |
+| **URL** | ...r-health-dash... | ...r-health-dash-option-c... |
+| **Status** | Running | Running |
+
 ### Local Development
 ```bash
 # Backend
@@ -546,6 +581,20 @@ cd frontend && npm run dev
 ```
 
 ### Production Deployment (Databricks Apps)
+
+**Original Dash App:**
+```bash
+cd dash_app
+bash ../deploy_dash_app.sh
+```
+
+**Option-C Dash App (Purple/Teal Theme):**
+```bash
+cd r_health_dash_option_c
+bash ../deploy_option_c.sh
+```
+
+**React + FastAPI App:**
 ```bash
 # Build frontend
 python3 build.py

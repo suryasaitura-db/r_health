@@ -1,0 +1,32 @@
+[
+  {
+    "name": "R_Health - Capacity Management",
+    "id": "01f0bd1bfac412338ed9128ce622faf7",
+    "path": "/Shared/R_Health - Capacity Management.lvdash.json",
+    "url": "https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfac412338ed9128ce622faf7"
+  },
+  {
+    "name": "R_Health - Denials Management",
+    "id": "01f0bd1bfb0a169abb63051cf302d657",
+    "path": "/Shared/R_Health - Denials Management.lvdash.json",
+    "url": "https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfb0a169abb63051cf302d657"
+  },
+  {
+    "name": "R_Health - Clinical Trial Matching",
+    "id": "01f0bd1bfb561e3db274a29d97e67ccb",
+    "path": "/Shared/R_Health - Clinical Trial Matching.lvdash.json",
+    "url": "https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfb561e3db274a29d97e67ccb"
+  },
+  {
+    "name": "R_Health - Timely Filing & Appeals",
+    "id": "01f0bd1bfb98119cb47f6cf14fe102d4",
+    "path": "/Shared/R_Health - Timely Filing & Appeals.lvdash.json",
+    "url": "https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfb98119cb47f6cf14fe102d4"
+  },
+  {
+    "name": "R_Health - Documentation Management",
+    "id": "01f0bd1bfbe61fec87bd0d61c98f4194",
+    "path": "/Shared/R_Health - Documentation Management.lvdash.json",
+    "url": "https://fe-vm-hls-amer.cloud.databricks.com/sql/dashboardsv3/01f0bd1bfbe61fec87bd0d61c98f4194"
+  }
+]
