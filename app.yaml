@@ -1,14 +1,13 @@
-resources:
-  - name: r-health-analytics
-    description: R_Health Healthcare Analytics Platform - Renown Health RFP Demo
-
-    # App configuration
-    # The app will serve both the FastAPI backend and React frontend
-    # Frontend is built and served as static files, backend handles API calls
+# R_Health Healthcare Analytics Platform - Databricks Apps Configuration
+# Serves FastAPI backend + React frontend for 5 healthcare analytics scenarios
 
 command:
-  - "python"
-  - "backend/app_main.py"
+  - "uvicorn"
+  - "backend.app_main:app"
+  - "--host"
+  - "0.0.0.0"
+  - "--port"
+  - "8000"
 
 env:
   - name: WAREHOUSE_ID
