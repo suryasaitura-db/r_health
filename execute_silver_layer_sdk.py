@@ -63,12 +63,13 @@ def execute_sql_statement(statement, statement_num, total_statements):
             wait_timeout="50s"
         )
 
-        if response.status and response.status.state == "SUCCEEDED":
+        if response.status and str(response.status.state) == "StatementState.SUCCEEDED":
             row_count = len(response.result.data_array) if response.result and response.result.data_array else 0
             print(f"  ✓ Success (rows: {row_count})")
             return True, f"Success (rows: {row_count})"
         else:
-            error_msg = response.status.error.message if response.status and response.status.error else "Unknown error"
+            state = str(response.status.state) if response.status else "No status"
+            error_msg = response.status.error.message if response.status and response.status.error else f"State: {state}"
             print(f"  ✗ Error: {error_msg[:200]}")
             return False, f"Error: {error_msg[:200]}"
 

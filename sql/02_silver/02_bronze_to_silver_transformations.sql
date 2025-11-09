@@ -206,48 +206,48 @@ SELECT
 
   -- Denial risk categorization
   CASE
-    WHEN denial_reason = 'Prior Authorization Required' THEN 'High Priority - Pre-Auth'
-    WHEN denial_reason = 'Medical Necessity' THEN 'High Priority - Clinical Review'
-    WHEN denial_reason IN ('Coding Error', 'Duplicate Claim') THEN 'Medium Priority - Administrative'
-    WHEN claim_status = 'Denied' THEN 'Medium Priority - General'
+    WHEN cm.denial_reason = 'Prior Authorization Required' THEN 'High Priority - Pre-Auth'
+    WHEN cm.denial_reason = 'Medical Necessity' THEN 'High Priority - Clinical Review'
+    WHEN cm.denial_reason IN ('Coding Error', 'Duplicate Claim') THEN 'Medium Priority - Administrative'
+    WHEN cm.claim_status = 'Denied' THEN 'Medium Priority - General'
     ELSE 'Low Priority'
   END AS denial_priority,
 
   -- Payer mix category
   CASE
-    WHEN payer_name = 'Medicare' THEN 'Government'
-    WHEN payer_name = 'Medicaid' THEN 'Government'
+    WHEN cm.payer_name = 'Medicare' THEN 'Government'
+    WHEN cm.payer_name = 'Medicaid' THEN 'Government'
     ELSE 'Commercial'
   END AS payer_category,
 
   -- Claim status category
   CASE
-    WHEN claim_status = 'Paid' THEN 'Closed - Paid'
-    WHEN claim_status = 'Denied' THEN 'Closed - Denied'
-    WHEN claim_status = 'Pending' AND claim_age_days > 30 THEN 'Open - Aged'
-    WHEN claim_status = 'Pending' THEN 'Open - Current'
+    WHEN cm.claim_status = 'Paid' THEN 'Closed - Paid'
+    WHEN cm.claim_status = 'Denied' THEN 'Closed - Denied'
+    WHEN cm.claim_status = 'Pending' AND cm.claim_age_days > 30 THEN 'Open - Aged'
+    WHEN cm.claim_status = 'Pending' THEN 'Open - Current'
     ELSE 'Unknown'
   END AS claim_category,
 
   -- Appeal opportunity flag
   CASE
-    WHEN claim_status = 'Denied'
-      AND denial_reason IN ('Prior Authorization Required', 'Medical Necessity', 'Out of Network')
-      AND claim_amount > 1000 THEN TRUE
+    WHEN cm.claim_status = 'Denied'
+      AND cm.denial_reason IN ('Prior Authorization Required', 'Medical Necessity', 'Out of Network')
+      AND cm.billed_amount > 1000 THEN TRUE
     ELSE FALSE
   END AS appeal_recommended,
 
   -- Data quality
   CASE
-    WHEN claim_id IS NULL THEN 'CRITICAL'
-    WHEN claim_amount IS NULL OR claim_amount < 0 THEN 'WARNING'
-    WHEN service_date IS NULL THEN 'WARNING'
+    WHEN cm.claim_id IS NULL THEN 'CRITICAL'
+    WHEN cm.billed_amount IS NULL OR cm.billed_amount < 0 THEN 'WARNING'
+    WHEN cm.service_date IS NULL THEN 'WARNING'
     ELSE 'VALID'
   END AS data_quality_status,
 
   CURRENT_TIMESTAMP() AS silver_load_timestamp
-FROM claim_metrics
-WHERE claim_id IS NOT NULL;
+FROM claim_metrics cm
+WHERE cm.claim_id IS NOT NULL;
 
 SELECT 'Created Silver Claims Table:', COUNT(*) AS record_count
 FROM hls_amer_catalog.r_health_silver.claims;
