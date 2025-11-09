@@ -16,3 +16,5 @@ env:
     value: "hls_amer_catalog"
   - name: ENVIRONMENT
     value: "production"
+  - name: DATABRICKS_HOST
+    value: "https://fe-vm-hls-amer.cloud.databricks.com"

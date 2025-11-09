@@ -6,10 +6,11 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from databricks.sdk import WorkspaceClient
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import os
+import requests
+import time
 
 app = FastAPI(
     title="R_Health Healthcare Analytics API",
@@ -26,30 +27,66 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Databricks configuration
-w = WorkspaceClient()
+# Databricks configuration from environment variables
+DATABRICKS_HOST = os.getenv("DATABRICKS_HOST", "https://fe-vm-hls-amer.cloud.databricks.com")
+DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
 WAREHOUSE_ID = os.getenv("WAREHOUSE_ID", "4b28691c780d9875")
+CATALOG_NAME = os.getenv("CATALOG_NAME", "hls_amer_catalog")
 
 
 def execute_query(query: str) -> List[Dict[str, Any]]:
-    """Execute SQL query and return results as list of dictionaries"""
-    try:
-        response = w.statement_execution.execute_statement(
-            warehouse_id=WAREHOUSE_ID,
-            statement=query,
-            wait_timeout="50s"
+    """Execute SQL query using Databricks SQL API and return results as list of dictionaries"""
+
+    # Check if running in development mode without token
+    if not DATABRICKS_TOKEN:
+        # In production, this will be auto-injected by Databricks Apps
+        # If not available, we need to handle gracefully
+        print(f"Warning: DATABRICKS_TOKEN not available. Query will fail: {query[:100]}")
+        raise HTTPException(
+            status_code=503,
+            detail="Database connection not configured. Please ensure DATABRICKS_TOKEN is set."
         )
 
-        if not response.result or not response.result.data_array:
+    try:
+        # Execute statement using Databricks SQL API
+        url = f"{DATABRICKS_HOST}/api/2.0/sql/statements"
+        headers = {
+            "Authorization": f"Bearer {DATABRICKS_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "warehouse_id": WAREHOUSE_ID,
+            "statement": query,
+            "wait_timeout": "50s"
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+        result = response.json()
+
+        # Check if query succeeded
+        if result.get("status", {}).get("state") != "SUCCEEDED":
+            error_msg = result.get("status", {}).get("error", {}).get("message", "Unknown error")
+            raise HTTPException(status_code=500, detail=f"Query failed: {error_msg}")
+
+        # Extract results
+        if not result.get("result") or not result.get("result", {}).get("data_array"):
             return []
 
-        columns = [col.name for col in response.result.manifest.schema.columns]
+        columns = [col["name"] for col in result["result"]["manifest"]["schema"]["columns"]]
+        rows = result["result"]["data_array"]
+
         results = []
-        for row in response.result.data_array:
+        for row in rows:
             results.append(dict(zip(columns, row)))
 
         return results
+
+    except requests.exceptions.RequestException as e:
+        print(f"Request error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database connection error: {str(e)}")
     except Exception as e:
+        print(f"Query error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Database query error: {str(e)}")
 
 

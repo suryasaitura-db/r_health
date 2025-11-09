@@ -31,24 +31,24 @@ echo "[3/4] Uploading files..."
 
 # Upload app.yaml
 echo "Uploading app.yaml..."
-databricks workspace import "$WORKSPACE_PATH/app.yaml" --file app.yaml --format AUTO
+databricks workspace import "$WORKSPACE_PATH/app.yaml" --file app.yaml --format AUTO --overwrite
 
 # Upload backend files
 echo "Uploading backend/app_main.py..."
-databricks workspace import "$WORKSPACE_PATH/backend/app_main.py" --file backend/app_main.py --language PYTHON
+databricks workspace import "$WORKSPACE_PATH/backend/app_main.py" --file backend/app_main.py --language PYTHON --overwrite
 
 echo "Uploading backend/requirements.txt..."
-databricks workspace import "$WORKSPACE_PATH/backend/requirements.txt" --file backend/requirements.txt --format AUTO
+databricks workspace import "$WORKSPACE_PATH/backend/requirements.txt" --file backend/requirements.txt --format AUTO --overwrite
 
 # Upload frontend files
 echo "Uploading frontend/dist/index.html..."
-databricks workspace import "$WORKSPACE_PATH/frontend/dist/index.html" --file frontend/dist/index.html --format AUTO
+databricks workspace import "$WORKSPACE_PATH/frontend/dist/index.html" --file frontend/dist/index.html --format AUTO --overwrite
 
 echo "Uploading frontend assets..."
 for file in frontend/dist/assets/*; do
   filename=$(basename "$file")
   echo "  - $filename"
-  databricks workspace import "$WORKSPACE_PATH/frontend/dist/assets/$filename" --file "$file" --format AUTO
+  databricks workspace import "$WORKSPACE_PATH/frontend/dist/assets/$filename" --file "$file" --format AUTO --overwrite
 done
 
 # Step 4: Deploy app
